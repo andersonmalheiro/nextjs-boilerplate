@@ -1,10 +1,17 @@
-import { FormEvent, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 
 interface GenericObject {
   [key: string]: any;
 }
 
-export const useForm = (callback: (...args: any[]) => void) => {
+export const useForm = (
+  callback: (...args: any[]) => void
+): [
+  (e: { target: any }) => void,
+  (e: FormEvent) => void,
+  GenericObject,
+  Dispatch<SetStateAction<GenericObject>>
+] => {
   const [values, setValues] = useState<GenericObject>({});
 
   const handleChange = (event: { target: any }) => {
@@ -25,5 +32,5 @@ export const useForm = (callback: (...args: any[]) => void) => {
     callback();
   };
 
-  return { handleChange, handleSubmit, values, setValues };
+  return [handleChange, handleSubmit, values, setValues];
 };

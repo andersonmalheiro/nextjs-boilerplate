@@ -1,21 +1,26 @@
-FROM node:12.20.2-alpine
+# Dependencies image
+FROM node:lts-alpine AS deps
 
-# Create app directory
-RUN mkdir -p /app
-WORKDIR /app
+WORKDIR /opt/app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Installing dependencies
-COPY package.json /app/
-COPY yarn.lock /app/
-RUN yarn install
+# Build step
+FROM node:lts-alpine AS builder
 
-# Copying source files
-COPY . /app
-
-# Building app
+ENV NODE_ENV=production
+WORKDIR /opt/app
+COPY . .
+COPY --from=deps /opt/app/node_modules ./node_modules
 RUN yarn build
 
-EXPOSE 3000
+# Production image
+FROM node:lts-alpine AS runner
 
-# Running the app
-CMD ["yarn", "start"]
+ARG X_TAG
+WORKDIR /opt/app
+ENV NODE_ENV=production
+COPY --from=builder /opt/app/public ./public
+COPY --from=builder /opt/app/.next ./.next
+COPY --from=builder /opt/app/node_modules ./node_modules
+CMD ["node_modules/.bin/next", "start"]

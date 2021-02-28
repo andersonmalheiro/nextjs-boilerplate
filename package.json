@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "export": "next export",
     "build": "next build",
     "start": "next start",
     "test": "jest",
@@ -13,11 +14,11 @@
     "clean": "gts clean",
     "compile": "tsc",
     "fix": "gts fix",
-    "prepare": "tsc",
-    "pretest": "tsc",
-    "posttest": "gts lint"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@babel/core": "^7.13.1",
     "@reduxjs/toolkit": "^1.5.0",
     "axios": "^0.21.1",
     "next": "10.0.7",
@@ -39,6 +40,7 @@
     "@types/styled-components": "^5.1.7",
     "babel-jest": "^26.6.3",
     "babel-plugin-styled-components": "^1.12.0",
+    "cypress": "^6.5.0",
     "gts": "^3.1.0",
     "jest": "^26.6.3",
     "typescript": "^4.1.5"
@@ -54,6 +56,17 @@
       "node_modules",
       "bower_components",
       "src"
+    ],
+    "roots": [
+      "<rootDir>"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/.next/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/cypress/"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.ts"
     ]
   }
 }

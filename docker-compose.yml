@@ -1,8 +1,8 @@
 version: "3.4"
 
 services:
-  frontend:
-    image: frontend
+  boilerplate:
+    image: boilerplate
     build:
       context: .
       dockerfile: ./Dockerfile
